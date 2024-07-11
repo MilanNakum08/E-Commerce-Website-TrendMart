@@ -10,14 +10,16 @@ import categoryRoutes from "./routes/categoryRoutes.js";
 import productRoutes from "./routes/productRoutes.js";
 import cors from "cors";
 import path from "path";
-
+import { fileURLToPath } from "url";
 // configure Dotenv
 dotenv.config();
 
 // database configuration
-
 connectDB();
 
+// es module fix
+const __filename =fileURLToPath(import.meta.url);
+const __dirname=path.dirname(__filename);
 // rest object
 const app = express();
 
@@ -33,15 +35,16 @@ app.use("/api/v1/auth", authRoutes); //any routes defined in authRoutes will be 
 app.use("/api/v1/category", categoryRoutes);
 app.use("/api/v1/product", productRoutes);
 
-//rest  api -- is a software architectural style for designing networked applications.
-app.get("/", (req, res) => {
-  res.send("<h1>Welcome to E commerce Website...</h1>");
-});
-
 //static files
 app.use(express.static(path.join(__dirname, "./client/build"))); // use build folder from client -configure
 
-app.get("*", function (re, res) {
+//rest  api -- is a software architectural style for designing networked applications.
+
+// app.get("/", (req, res) => {
+//   res.send("<h1>Welcome to E commerce Website...</h1>");
+// });
+
+app.get("*", function (req, res) {
   // access
   res.sendFile(path.join(__dirname, "./client/build/index.html"));
 });
